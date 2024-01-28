@@ -10,7 +10,7 @@ class Player():
         self.playerNumber = playerNumber      
         self.properties = properties
 
-    money = 200 #All players have the same money when starting
+    money = 2500 #All players have the same money when starting
     position = 0
     jail = False
 
@@ -63,6 +63,17 @@ class Monopoly():
                 player.money += random.choice(self.chanceCards)
 
             #Taxes ------------------------------>
+            if player.position == 4:
+                print("taxes")
+                player.money -= 200
+
+            if player.position in (12,29):
+                print("taxes")
+                player.money -= 150
+
+            if player.position == 38:
+                print("taxes")
+                player.money -= 100
 
             #Mutate properties information
 
@@ -98,7 +109,7 @@ def main(n_players):
     playerWithLessMoney = min([p.money for p in game.players])
     
     #while playerWithLessMoney > 0:
-    for i in range(200):
+    for i in range(70):
 
         game.round(players)
         playerWithLessMoney = min([p.money for p in game.players])
