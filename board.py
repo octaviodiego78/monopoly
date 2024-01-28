@@ -14,7 +14,10 @@ class Player():
     position = 0
     jail = False
 
-
+class Properties():
+    def __init__(self, **kwargs) -> None:
+        for k,v in kwargs.items():
+            setattr(self, k, v)
 
 class Monopoly():
    
@@ -22,8 +25,11 @@ class Monopoly():
         self.players = players
 
     rounds = 1
-    squares = getSquaresInfo()
     chanceCards = getChanceCards()
+    properties = [Properties(**pm) for pm in getSquaresInfo()]
+
+    print(vars(properties[0]))
+
 
     
     def roll_dice(self) -> int:
@@ -75,7 +81,8 @@ class Monopoly():
                 print("taxes")
                 player.money -= 100
 
-            #Mutate properties information
+            #Railroads
+            
 
 
             #Mutate position and money of player
@@ -109,7 +116,7 @@ def main(n_players):
     playerWithLessMoney = min([p.money for p in game.players])
     
     #while playerWithLessMoney > 0:
-    for i in range(70):
+    for i in range(1):
 
         game.round(players)
         playerWithLessMoney = min([p.money for p in game.players])

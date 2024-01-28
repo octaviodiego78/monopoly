@@ -3,17 +3,19 @@ def getSquaresInfo():
     squaresInfo = []
 
     for i in range(40):
+
+        if i in ([2,7,17,22,33,36,10,30,4,12,29,38]):
+            specialSquare = True
+        else:
+            specialSquare = False
+
         squaresInfo.append(
             {"squareId":i
-            ,"isStart":0
-            ,"isJail":0
-            ,"isRailRoad":0
-            ,"isMagicCard":0
-            ,"isTax":0
-            ,"isWaterWork":0
-            ,"isOwned":0
-            ,"Owner":0
-            ,"Name":""
+            ,"isSpecialSquare":specialSquare
+            ,"isOwned":False
+            ,"ownerId":0
+            ,"name":""
+            ,"color":""
             ,"price":0
             ,"rent":0
             ,"costPerHouse":0
