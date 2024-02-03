@@ -13,7 +13,7 @@ def getSquaresInfo():
             {"squareId":i
             ,"isSpecialSquare":specialSquare
             ,"isOwned":False
-            ,"ownerId":0
+            ,"owner":0
             ,"name":""
             ,"color":""
             ,"price":0
