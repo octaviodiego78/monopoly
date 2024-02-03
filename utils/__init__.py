@@ -13,17 +13,13 @@ def getSquaresInfo():
             {"squareId":i
             ,"isSpecialSquare":specialSquare
             ,"isOwned":False
-            ,"owner":0
+            ,"owner":None
             ,"name":""
-            ,"color":""
             ,"price":0
             ,"rent":0
+            ,"rentWithHouses":[100,200,300,400,500]
             ,"costPerHouse":0
-            ,"costPerHotel":0
-            ,"rentPerHouse":0
-            ,"rentPerHotel":0
-            ,"houses":0
-            ,"hotel":0}
+            ,"houses":0}
             )
 
     return squaresInfo
@@ -31,3 +27,16 @@ def getSquaresInfo():
 
 def getChanceCards():
     return [-200, -150, -100, -50, 50, 100, 200,]
+
+
+railroadJSON = {"squareId":1
+            ,"isSpecialSquare":1
+            ,"isOwned":False
+            ,"owner":None
+            ,"name":""
+            ,"price":0
+            ,"rent":0
+            ,"rentWithHouses":[100,200,300,400,500]
+            ,"costPerHouse":0
+            ,"houses":0}
+            
