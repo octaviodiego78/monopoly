@@ -3,11 +3,6 @@ import random
 from typing import List
 from utils.__init__ import getSquaresInfo, getChanceCards
 
-"""Move money, position, and jail attributes into _init_ in the Player class: These should be instance attributes, not class attributes. Class attributes are shared across all instances of the class, which isn't what you want for individual players.
-Change Properties class name to Property: It's a common practice to use singular names for classes.
-Integrate the Property class with the Monopoly class: You mentioned that Property does not exist inside the Monopoly class, but you want to relate it to the players. We can create a list of properties as a class attribute in Monopoly and assign owners as Player objects.
-Correcting turn and round methods: I'll adjust the methods to make them more consistent and efficient."""
-
 
 class Player():
 
@@ -27,7 +22,7 @@ class Property():
 
 class Monopoly():
    
-    def __init__(self, players: List[object]) -> None:
+    def __init__(self, players: List[Player]) -> None:
         self.players = players
 
     class Property():
@@ -145,7 +140,7 @@ class Monopoly():
 
 
 
-    def round(self,players: List[object]):
+    def round(self,players: List[Player]):
         #Make a turn for all players
         #print(f"Round: {self.rounds}")
         for p in players:
