@@ -18,6 +18,7 @@ class Player():
         self.money = 2500  #All players have the same money when starting
         self.position = 0
         self.jail = False
+        self.railroads = 0
 
 class Property():
     def __init__(self, **kwargs) -> None:
@@ -98,36 +99,47 @@ class Monopoly():
                 print("taxes")
                 player.money -= 100
 
-            #Railroads
-            
-
 
             #Mutate position and money of player
             currentProperty = self.properties[player.currentPosition] #does properties need a self because it's created inside a method from monopoly class?
 
-            if currentProperty.owner == player: 
-                #Simulating the player decision to add a house or many  to the property
-                    #For properties with less than 5 house
-                    #Only is your simulated descition to buy a house is True
-                    #If you have enough money for houses
-                propertyHouses = currentProperty.houses
-                if (5 - propertyHouses) > 0 and (player.money > ((5 - propertyHouses)*currentProperty.costPerHouse)) and self.binaryChoice: 
-
-                    housesToAdd = self.housesChoice(5 - propertyHouses) #Decide houses to add
-                    currentProperty.houses += housesToAdd               #Update amount of houses on property
-                    player.money -= currentProperty.costPerHouse * housesToAdd  #Pay for the houses
-                    currentProperty.rent = currentProperty.rentWithHouses[currentProperty.houses -1]    #Set rent to the price with n houses
-
+            if player.position in (5,15,25,35): #If position is a railroad
+                
+                if currentProperty.owner != player: #If the owner of the railroad is not the player
+                    if currentProperty.owner == None:  #if no one is the owner
+                        if player.money > currentProperty.price and self.binaryChoice(): #option to buy it
+                            currentProperty.owner = player
+                            player.money -= currentProperty.price
+                            player.railroads += 1
+                    else:
+                        rentToPay =  currentProperty.owner.railroads*50
+                        currentProperty.owner += rentToPay
+                        player -= rentToPay
+            
             else:
-                if currentProperty.owner == None:
-                    if self.binaryChoice():
-                        player.money -=  currentProperty.price #Pay for the property 
-                        currentProperty.owner = player #Update property owner
+                if currentProperty.owner == player: 
+                    #Simulating the player decision to add a house or many  to the property
+                        #For properties with less than 5 house
+                        #Only is your simulated descition to buy a house is True
+                        #If you have enough money for houses
+                    propertyHouses = currentProperty.houses
+                    if (5 - propertyHouses) > 0 and (player.money > ((5 - propertyHouses)*currentProperty.costPerHouse)) and self.binaryChoice: 
+
+                        housesToAdd = self.housesChoice(5 - propertyHouses) #Decide houses to add
+                        currentProperty.houses += housesToAdd               #Update amount of houses on property
+                        player.money -= currentProperty.costPerHouse * housesToAdd  #Pay for the houses
+                        currentProperty.rent = currentProperty.rentWithHouses[currentProperty.houses -1]    #Set rent to the price with n houses
 
                 else:
-                    #Paying rent to the owner
-                    player.money -= currentProperty.rent
-                    currentProperty.owner.money += currentProperty.rent
+                    if currentProperty.owner == None:
+                        if self.binaryChoice():
+                            player.money -=  currentProperty.price #Pay for the property 
+                            currentProperty.owner = player #Update property owner
+
+                    else:
+                        #Paying rent to the owner
+                        player.money -= currentProperty.rent
+                        currentProperty.owner.money += currentProperty.rent
                     
     
 
@@ -142,9 +154,6 @@ class Monopoly():
 
 
 
-
-    
-
 def main(n_players):
 
     #Creating players
@@ -154,18 +163,12 @@ def main(n_players):
         players.append(Player(i,[]))
 
     #Monopoly creating
-    game = Monopoly(players)
-
-
-
-    #Games goes on until someone gets out of money
-    playerWithLessMoney = min([p.money for p in game.players])
-    
-    #while playerWithLessMoney > 0:
+    monopoly = Monopoly(players)
+  
+    #while min([p.money for p in game.players]) > 0:
     for i in range(1):
 
-        game.round(players)
-        playerWithLessMoney = min([p.money for p in game.players])
+        monopoly.round(players)
 
 
     
