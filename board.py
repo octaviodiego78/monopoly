@@ -2,6 +2,7 @@ import numpy
 import random
 from typing import List
 from utils.__init__ import getSquaresInfo, getChanceCards
+import pandas as pd
 
 
 class Player():
@@ -24,6 +25,7 @@ class Monopoly():
    
     def __init__(self, players: List[Player]) -> None:
         self.players = players
+        self.results = pd.DataFrame(columns = ["player","current_position", "dice","position","jail","is_special_position","money", "properties", "networth" ])
 
 
     rounds = 1
@@ -47,8 +49,11 @@ class Monopoly():
     def turn(self,player: Player):
 
         if player.jail == True:
-            print(f"Player{player.playerNumber} in jail")
             player.jail = False
+
+            dice = 0
+            lastPosition = player.position #Last position
+            player.position = (player.position + dice) % 40 #New position
         
         else:
             #Roll dice
@@ -61,7 +66,6 @@ class Monopoly():
             if player.position < lastPosition:
                 player.money +=  200
 
-            print(f"Player {player.playerNumber} - Dice {dice} - Last Position {lastPosition} - Position {player.position} - Money {player.money}")
 
             if self.properties[player.position].isSpecialSquare == True:
                 #Jail ------------------------------->
@@ -74,20 +78,16 @@ class Monopoly():
 
                 #Chance Cards ----------------------->
                 if player.position in (2,7,17,22,33,36):
-                    print("Chance carrd or chest")
                     player.money += random.choice(self.chanceCards)
 
                 #Taxes ------------------------------>
                 if player.position == 4:
-                    print("taxes")
                     player.money -= 200
 
                 if player.position in (12,29):
-                    print("taxes")
                     player.money -= 150
 
                 if player.position == 38:
-                    print("taxes")
                     player.money -= 100
 
             else:
@@ -126,6 +126,7 @@ class Monopoly():
                             if self.binaryChoice(): 
                                 player.money -=  currentProperty.price #Pay for the property 
                                 currentProperty.owner = player #Update property owner
+                                player.properties.append(currentProperty) #Add property to player's properties
 
 
                         else:
@@ -133,13 +134,15 @@ class Monopoly():
                             rentToPay = currentProperty.rent
                             player.money -= rentToPay
                             currentProperty.owner.money += rentToPay
-                    
+    
+        return [player.playerNumber,lastPosition, dice, player.position, player.jail
+                , self.properties[player.position].isSpecialSquare, player.money, len(player.properties)
+                , player.money + sum([p.price for p in player.properties])] 
 
     def round(self,players: List[Player]):
         #Make a turn for all players
-        #print(f"Round: {self.rounds}")
         for p in players:
-            self.turn(p)
+            self.results.loc[len(self.results)] = self.turn(p)
         self.rounds += 1
 
 
@@ -154,12 +157,13 @@ def main(n_players):
 
     #Monopoly creating
     monopoly = Monopoly(players)
-  
-    #while min([p.money for p in game.players]) > 0:
-    for i in range(10):
+    
+    
+    while min([p.money for p in monopoly.players]) > 0:
 
         monopoly.round(players)
 
+    monopoly.results.to_csv("results.csv")
 
     
 
