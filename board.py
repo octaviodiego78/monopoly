@@ -5,6 +5,12 @@ from utils.__init__ import getSquaresInfo, getChanceCards
 import pandas as pd
 
 
+# Possible rent to pay
+# Rent to charge 
+# Houses
+
+
+
 class Player():
 
     def __init__(self, playerNumber: int, properties: list[object]) -> None:
@@ -15,6 +21,8 @@ class Player():
         self.position = 0
         self.jail = False
         self.railroads = 0
+        self.houses = 0
+        self.rent_to_charge = 0
 
 class Property():
     def __init__(self, **kwargs) -> None:
@@ -93,7 +101,7 @@ class Monopoly():
             else:
 
                 #Mutate position and money of player
-                currentProperty = self.properties[player.position] #does properties need a self because it's created inside a method from monopoly class?
+                currentProperty = self.properties[player.position] 
 
                 if player.position in (5,15,25,35): #If position is a railroad
                     
@@ -169,7 +177,7 @@ def main(n_players):
 
 
 if __name__ == '__main__':
-    main(2)
+    main(3)
 
 
 
