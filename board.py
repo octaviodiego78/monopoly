@@ -3,6 +3,7 @@ import random
 from typing import List
 from utils.__init__ import getSquaresInfo, getChanceCards
 import pandas as pd
+import time
 
 
 
@@ -238,14 +239,23 @@ def main(n_players):
         monopoly.round(players)
 
     winner = monopoly.results.tail(3).groupby('player_number').max()['money'].sort_values(ascending=False).index[0]
-    print(winner)
-    monopoly.results.loc[(monopoly.results['player_number'] == winner) & (monopoly.results["is_special_position"] == False)].to_csv("results.csv")
-    
+    return monopoly.results.loc[(monopoly.results['player_number'] == winner) & (monopoly.results["is_special_position"] == False)]
 
 
 
 if __name__ == '__main__':
-    main(3)
+    df = pd.DataFrame(
+            columns = ["player_number","last_position","dice","current_position","jail","is_special_position","money","properties","networth"
+                       ,"owned_properties_price","owned_properties_houses","rent_to_charge","percentage_of_owned_properties","railroads_owned"
+                       ,"properties_available","buy","money2","properties2","networth2","owned_properties_price2","owned_properties_houses2"
+                       ,"rent_to_charge2","percentage_of_owned_properties2","railroads_owned2","properties_available2"])
+    start = time.time()
+    for _ in range(3000):
+        df = pd.concat([df, main(3)], axis=0)
+    print(time.time() - start)
+    print(len(df))
+    df.to_csv("results.csv")
+
 
 
 
