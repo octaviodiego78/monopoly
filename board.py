@@ -237,10 +237,11 @@ def main(n_players):
 
         monopoly.round(players)
 
-    #monopoly.results.loc[monopoly.results["is_special_position"] == False] .to_csv("results.csv")
-    monopoly.results.to_csv("results.csv")
-
+    winner = monopoly.results.tail(3).groupby('player_number').max()['money'].sort_values(ascending=False).index[0]
+    print(winner)
+    monopoly.results.loc[(monopoly.results['player_number'] == winner) & (monopoly.results["is_special_position"] == False)].to_csv("results.csv")
     
+
 
 
 if __name__ == '__main__':
